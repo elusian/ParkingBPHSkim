@@ -1,0 +1,8 @@
+#ifndef NtuTool_EDM_EDAnalyzerWrapper_h
+#define NtuTool_EDM_EDAnalyzerWrapper_h
+
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+
+typedef edm::EDAnalyzer EDAnalyzerWrapper;
+
+#endif // NtuTool_EDM_EDAnalyzerWrapper_h

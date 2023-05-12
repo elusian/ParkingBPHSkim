@@ -1,0 +1,12 @@
+<use   name="TMPAnalysis/Ntu"/>
+<use   name="NtuAnalysis/Write"/>
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/ParameterSet"/>
+<use   name="DataFormats/PatCandidates"/>
+<export>
+  <use   name="TMPAnalysis/Ntu"/>
+  <use   name="NtuAnalysis/Write"/>
+  <use   name="FWCore/Framework"/>
+  <use   name="FWCore/ParameterSet"/>
+  <lib   name="1"/>
+</export>

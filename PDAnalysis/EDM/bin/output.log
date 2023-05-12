@@ -1,0 +1,52 @@
+11-May-2023 14:32:57 CEST  Initiating request to open file file:/lustre/cmswork/tosi/ana/ParkingBPH1__Run2018A_UL2018_MiniAODv2-v1__MINIAOD__79E4C695-6534-E240-9501-85E0891AF579.root
+11-May-2023 14:33:05 CEST  Successfully opened file file:/lustre/cmswork/tosi/ana/ParkingBPH1__Run2018A_UL2018_MiniAODv2-v1__MINIAOD__79E4C695-6534-E240-9501-85E0891AF579.root
+new PDAnalyzer
+new PDEDMToNtuple
+PDNtupleBranch<T>::initTree()
+Begin processing the 1st record. Run 316187, Event 2827351648, LumiSection 2005 on stream 0 at 11-May-2023 14:33:22.902 CEST
+entering BPHD0ToKPiBuilder
+cand.getLxySigWrtBS: fittedVertex.isFake(): 0
+fittedVertex.isValid(): 1
+
+
+A fatal system signal has occurred: segmentation violation
+The following is the call stack containing the origin of the signal.
+
+Thu May 11 14:33:38 CEST 2023
+Thread 2 (Thread 0x7f47fa1ff700 (LWP 17591)):
+#0  0x00007f4815edf1d9 in waitpid () from /lib64/libpthread.so.0
+#1  0x00007f480a199297 in edm::service::cmssw_stacktrace_fork() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/pluginFWCoreServicesPlugins.so
+#2  0x00007f480a199d7a in edm::service::InitRootHandlers::stacktraceHelperThread() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/pluginFWCoreServicesPlugins.so
+#3  0x00007f48164cacbf in std::execute_native_thread_routine (__p=0x7f47fa799bf0) at ../../../../../libstdc++-v3/src/c++11/thread.cc:83
+#4  0x00007f4815ed7ea5 in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f4815bfeb0d in clone () from /lib64/libc.so.6
+Thread 1 (Thread 0x7f481425f480 (LWP 17573)):
+#0  0x00007f4815bf3ddd in poll () from /lib64/libc.so.6
+#1  0x00007f480a1997c7 in full_read.constprop () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/pluginFWCoreServicesPlugins.so
+#2  0x00007f480a199e5c in edm::service::InitRootHandlers::stacktraceFromThread() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/pluginFWCoreServicesPlugins.so
+#3  0x00007f480a19aec8 in sig_dostack_then_abort () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/pluginFWCoreServicesPlugins.so
+#4  <signal handler called>
+#5  0x00007f47dccf1cc9 in BPHDecayVertex::getLxySigWrtBS() const () from /lustre/cmswork/tosi/ana/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libHeavyFlavorAnalysisRecoDecay.so
+#6  0x00007f47dcd3acbf in BPHDecayToTkpTknSymChargeBuilder::build() () from /lustre/cmswork/tosi/ana/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libHeavyFlavorAnalysisSpecificDecay.so
+#7  0x00007f47dcd9c4aa in PDEDMToNtuple::fillSVertReco() () from /lustre/cmswork/tosi/ana/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libPDAnalysisEDM.so
+#8  0x00007f47dcda3960 in PDEDMToNtuple::read(edm::EventBase const&) () from /lustre/cmswork/tosi/ana/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libPDAnalysisEDM.so
+#9  0x00007f47dc93a7b0 in NtuEDMAnalyzer::analyzeEDM (this=0x7f47e8ec3818, ev=..., ientry=0, event_file=0) at /lustre/cmswork/tosi/ana/CMSSW_10_6_26/src/NtuAnalysis/Write/src/NtuEDMAnalyzer.cc:51
+#10 0x00007f47dce09db1 in NtuWriteInterface<PDEDMToNtuple>::analyzeEDM(edm::EventBase const&, int, int) () from /lustre/cmswork/tosi/ana/CMSSW_10_6_26/lib/slc7_amd64_gcc700/pluginPDAnalysisEDMPlugins.so
+#11 0x00007f4818a79f6e in edm::EDAnalyzer::doEvent(edm::EventPrincipal const&, edm::EventSetupImpl const&, edm::ActivityRegistry*, edm::ModuleCallingContext const*) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#12 0x00007f4818ab6092 in edm::WorkerT<edm::EDAnalyzer>::implDo(edm::EventPrincipal const&, edm::EventSetupImpl const&, edm::ModuleCallingContext const*) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#13 0x00007f4818a3e0fa in decltype ({parm#1}()) edm::convertException::wrap<bool edm::Worker::runModule<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >(edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::MyPrincipal const&, edm::EventSetupImpl const&, edm::StreamID, edm::ParentContext const&, edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::Context const*)::{lambda()#1}>(bool edm::Worker::runModule<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >(edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::MyPrincipal const&, edm::EventSetupImpl const&, edm::StreamID, edm::ParentContext const&, edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::Context const*)::{lambda()#1}) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#14 0x00007f4818a3e2bd in bool edm::Worker::runModule<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >(edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::MyPrincipal const&, edm::EventSetupImpl const&, edm::StreamID, edm::ParentContext const&, edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::Context const*) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#15 0x00007f4818a3e64b in std::__exception_ptr::exception_ptr edm::Worker::runModuleAfterAsyncPrefetch<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >(std::__exception_ptr::exception_ptr const*, edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::MyPrincipal const&, edm::EventSetupImpl const&, edm::StreamID, edm::ParentContext const&, edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1>::Context const*) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#16 0x00007f4818a406a5 in void edm::SerialTaskQueueChain::actionToRun<edm::Worker::RunModuleTask<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >::execute()::{lambda()#1}&>(edm::Worker::RunModuleTask<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >::execute()::{lambda()#1}&) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#17 0x00007f4818a407c1 in edm::SerialTaskQueue::QueuedTask<void edm::SerialTaskQueueChain::push<edm::Worker::RunModuleTask<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >::execute()::{lambda()#1}&>(edm::Worker::RunModuleTask<edm::OccurrenceTraits<edm::EventPrincipal, (edm::BranchActionType)1> >::execute()::{lambda()#1}&)::{lambda()#1}>::execute() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#18 0x00007f4817256931 in tbb::internal::custom_scheduler<tbb::internal::IntelSchedulerTraits>::local_wait_for_all (this=0x7f4812cab200, parent=..., child=<optimized out>) at ../../src/tbb/custom_scheduler.h:521
+#19 0x00007f4818b063d0 in edm::EventProcessor::processLumis(std::shared_ptr<void> const&) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#20 0x00007f4818b0fe21 in edm::EventProcessor::runToCompletion() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc700/cms/cmssw/CMSSW_10_6_26/lib/slc7_amd64_gcc700/libFWCoreFramework.so
+#21 0x000000000040fe78 in main::{lambda()#1}::operator()() const ()
+#22 0x000000000040e142 in main ()
+
+Current Modules:
+
+Module: PDNtuplizer:pdAnalyzer (crashed)
+
+A fatal system signal has occurred: segmentation violation

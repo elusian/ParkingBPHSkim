@@ -1,0 +1,11 @@
+<use   name="TMPAnalysis/EDM"/>
+<use   name="NtuAnalysis/Write"/>
+<use   name="PhysicsTools/FWLite"/>
+<use   name="DataFormats/FWLite"/>
+<use   name="DataFormats/Common"/>
+<use   name="FWCore/FWLite"/>
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/ParameterSet"/>
+<use   name="FWCore/PythonParameterSet"/>
+<use   name="root"/>
+<bin   file="tmpFWLite.cc" name="tmpFWLite"/>

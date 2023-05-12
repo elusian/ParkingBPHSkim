@@ -1,0 +1,8 @@
+#ifndef NtuTool_EDM_EDProducerWrapper_h
+#define NtuTool_EDM_EDProducerWrapper_h
+
+#include "FWCore/Framework/interface/EDProducer.h"
+
+typedef edm::EDProducer EDProducerWrapper;
+
+#endif // NtuTool_EDM_EDProducerWrapper_h

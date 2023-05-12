@@ -1,0 +1,6 @@
+<use   name="TMPAnalysis/EDM"/>
+<use   name="NtuAnalysis/Write"/>
+<use   name="FWCore/Framework"/>
+<library   file="*.cc" name="TMPAnalysisEDMPlugins">
+  <flags   EDM_PLUGIN="1"/>
+</library>
