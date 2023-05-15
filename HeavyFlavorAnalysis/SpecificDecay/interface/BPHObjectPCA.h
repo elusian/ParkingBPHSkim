@@ -11,12 +11,17 @@
 
 
 GlobalTrajectoryParameters traj(const reco::Track& trk, const MagneticField* magneticField) {
-  return GlobalTrajectoryParameters( trk.vertex(), trk.momentum(), TrackCharge( trk.charge() ), magneticField );
+  GlobalPoint v(trk.vx(), trk.vy(), trk.vz());
+  GlobalVector p3(trk.px(), trk.py(), trk.pz());
+  return GlobalTrajectoryParameters( v, p3, TrackCharge( trk.charge() ), magneticField );
 }
 
 GlobalTrajectoryParameters traj(BPHRecoConstCandPtr cand, const MagneticField* magneticField) {
-  math::XYZVector p3 = cand.p4().Vect();
-  return GlobalTrajectoryParameters( cand.vertex().position(), p3, TrackCharge( trk.charge() ), magneticField );
+  auto vertex = cand->vertex().position();
+  GlobalPoint v(vertex.x(), vertex.y(), vertex.z());
+  auto p4 = cand->p4();
+  GlobalVector p3(p4.px(), p4.py(), p4.pz());
+  return GlobalTrajectoryParameters( v, p3, TrackCharge( cand->composite().charge() ), magneticField );
 }
 
 template <typename T, typename U>
