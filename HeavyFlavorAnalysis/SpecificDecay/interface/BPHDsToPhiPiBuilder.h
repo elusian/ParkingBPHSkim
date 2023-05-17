@@ -58,11 +58,11 @@ class BPHDsToPhiPiBuilder:
                             BPHParticleMasses::pionMass,
                             BPHParticleMasses::pionMSigma, piCollection ) {
     setResMassRange( 1.00, 1.04 );
-    setTrkPtMin    ( 0.7 );
+    setTrkPtMin    ( 1.0 );
     setTrkEtaMax   ( 3.0 );
     setMassRange   ( 1.50, 2.40 );
     setProbMin     ( 0.02 );
-    setMassFitRange( 1.60, 2.30 );    
+    setMassFitRange( 1.70, 2.20 );
     setConstr( true );
 
     if (bs) {

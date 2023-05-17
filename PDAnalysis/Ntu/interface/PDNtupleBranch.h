@@ -430,6 +430,8 @@ class PDNtupleBranch: public virtual PDNtupleData, public virtual T,
   TBranch* b_svtSigma3D;
   TBranch* b_svtJet;
   TBranch* b_svtBadQuality;
+  
+  TBranch* b_svtPCA;
 
   // composite particle vertices
   void setBranches_vsub();

@@ -19,6 +19,9 @@
 #include "HeavyFlavorAnalysis/SpecificDecay/interface/BPHD0ToKPiBuilder.h"
 #include "HeavyFlavorAnalysis/SpecificDecay/interface/BPHDpToKsPiBuilder.h"
 #include "HeavyFlavorAnalysis/SpecificDecay/interface/BPHDsToPhiPiBuilder.h"
+#include "HeavyFlavorAnalysis/SpecificDecay/interface/BPHDpsToKsKBuilder.h"
+#include "HeavyFlavorAnalysis/SpecificDecay/interface/BPHDxToD0PiBuilder.h"
+#include "HeavyFlavorAnalysis/SpecificDecay/interface/BPHObjectPCA.h"
 //#include "PDAnalysis/EDM/interface/PDJPsiBuilder.h"
 //#include "PDAnalysis/EDM/interface/PDKx0Builder.h"
 //#include "PDAnalysis/EDM/interface/PDPhiBuilder.h"
@@ -3423,6 +3426,11 @@ void PDEDMToNtuple::fillSVertReco() {
   if ( verbose ) cout << "fillSVertReco" << endl;
   if ( currentEvSetup == 0 ) return;
   rsvMap.clear();
+  
+  edm::ESHandle<TransientTrackBuilder> ttB;
+  static_cast<BPHESTokenWrapper<TransientTrackBuilder,
+                                TransientTrackRecord>*>( esTokenMap[&gt_ttB] )->
+              get( *currentEvSetup, ttB );
 
   map<const Candidate*,const Vertex*>::const_iterator p_iter;
   map<const Candidate*,const Vertex*>::const_iterator p_iend = pcvMap.end();
@@ -3649,7 +3657,7 @@ void PDEDMToNtuple::fillSVertReco() {
   if ( verbose ) cout << "fit D0" << endl;
   vector<BPHPlusMinusConstCandPtr> lD0;
   if ( vRecoFlag[PDEnumString::svtD0     ] ||
-       vRecoFlag[PDEnumString::svtDxpD0Pi] ) {
+       vRecoFlag[PDEnumString::svtDxD0Pi] ) {
     BPHD0ToKPiBuilder D0( *currentEvSWrap,
 			  BPHRecoBuilder::createCollection( candList, "cfp" ),
 			  BPHRecoBuilder::createCollection( candList, "cfp" ),
@@ -3708,6 +3716,7 @@ void PDEDMToNtuple::fillSVertReco() {
                                          d0->mass(), ttm, tmm,// rcm, rom,
 //                                         d0->composite().mass(), ttm, tmm,// rcm, rom,
                                          dir, d2d, d3d, d0Name, -1 );
+      svtPCA->back() = minimum_distance(*d0->getTrack( pkd[0] ), *d0->getTrack( pkd[1] ), ttB->field());
       if ( verbose ) cout << "D0 mass: " << d0->mass() << endl;
       rsvMap[d0] = svtIndex;
   }
@@ -3849,6 +3858,7 @@ void PDEDMToNtuple::fillSVertReco() {
                                          phi->mass(), ttm, tmm,// rcm, rom,
 //                                         phi->composite().mass(), ttm, tmm,// rcm, rom,
                                          dir, d2d, d3d, ssName, -1 );
+      svtPCA->back() = minimum_distance(*phi->getTrack( pkd[0] ), *phi->getTrack( pkd[1] ), ttB->field());
       rsvMap[phi] = svtIndex;
     }
     addVertexRel( svtIndex, rsvMap[phi], PDEnumString::vtrCascade,
@@ -4350,7 +4360,8 @@ void PDEDMToNtuple::fillSVertReco() {
   if ( verbose ) cout << "fit K0short" << endl;
   vector<BPHPlusMinusConstCandPtr> lKs;
   if ( vRecoFlag[PDEnumString::svtK0short] ||
-       vRecoFlag[PDEnumString::svtDpK0sPi] ) {
+       vRecoFlag[PDEnumString::svtDpK0sPi] ||
+       vRecoFlag[PDEnumString::svtDpsK0sK] ) {
     V0HT* ht = v0ht[PDEnumString::svtK0short];
     if ( ht != 0 ) {
       ht->gt_v0.get( currentEvBase, ht->v0 );
@@ -4423,7 +4434,8 @@ void PDEDMToNtuple::fillSVertReco() {
   vector<BPHRecoConstCandPtr> lDp;
   if ( vRecoFlag[PDEnumString::svtDpK0sPi] ) {
     BPHDpToKsPiBuilder dp( *currentEvSWrap, lKs,
-                        BPHRecoBuilder::createCollection( candList, "cfp" ) );
+                        BPHRecoBuilder::createCollection( candList, "cfp" ), 
+                        beamSpot.product() );
     lDp = dp.build();
 //       lDp = BPHDpToJPsiKBuilder::build( *currentEvSWrap, lJPsi,
 //             BPHRecoBuilder::createCollection( candList ) );
@@ -4490,6 +4502,158 @@ void PDEDMToNtuple::fillSVertReco() {
 //    ++nVtxRel;
     addVertexRel( svtIndex, rsvMap[k0s], PDEnumString::vtrCascade,
                   k0s->vertex().p4().M() );
+  }
+  
+  
+  
+  if ( verbose ) cout << "fit Dps" << endl;
+  vector<BPHRecoConstCandPtr> lDps;
+  if ( vRecoFlag[PDEnumString::svtDpsK0sK] ) {
+    BPHDpsToKsKBuilder dps( *currentEvSWrap, lKs,
+                        BPHRecoBuilder::createCollection( candList, "cfp" ), 
+                        beamSpot.product() );
+    lDps = dps.build();
+//       lDp = BPHDpToJPsiKBuilder::build( *currentEvSWrap, lJPsi,
+//             BPHRecoBuilder::createCollection( candList ) );
+  }
+  int iDps;
+  int nDps = lDps.size();
+  const string dpsName = "svtDpsK0sK";
+  for ( iDps = 0; iDps < nDps; ++iDps ) {
+    const BPHRecoCandidate* dps = lDps[iDps].get();
+    if ( !dps->validVertex() ) continue;
+    const vector<const Candidate*>& dpsd = dps->daughFull();
+    int id;
+    int nd = dpsd.size();
+    map<const Track*,TransientTrack*> ttm;
+    map<const Track*,float          > tmm;
+//    map<const Track*,const Candidate*> rcm;
+//    map<const Track*,const Candidate*> rom;
+    const Vertex* vtp = 0;
+    const Vertex* vtn = 0;
+    for ( id = 0; id < nd; ++id ) {
+      const Candidate* rc = dpsd[id];
+//      const Candidate* rc = dps->originalReco( dpsd[id] );
+      const Track* tkp = dps->getTrack( rc );
+      ttm[tkp] = dps->getTransientTrack( rc );
+      tmm[tkp] = dpsd[id]->mass();
+//      rcm[tkp] = rc;
+//      rom[tkp] = dps->originalReco( rc );
+      if ( vtp == 0 ) {
+        p_iter = pcvMap.find( dps->originalReco( rc ) );
+        if ( p_iter != p_iend ) vtp = p_iter->second;
+      }
+      if ( vtn == 0 ) vtn = nearestPV( tkp );
+    }
+    if ( vtp == 0 ) vtp = vtn;
+    const Vertex& vtr = dps->vertex();
+    GlobalVector  dir;
+    Measurement1D d2d;
+    Measurement1D d3d;
+//    if ( vtp != 0 ) vertexDir( *vtp, vtr, dps->composite(), dir, d2d, d3d );
+    vtp =
+    vertexDir( vtr, dps->composite(), dir, d2d, d3d );
+    vtn =
+    vertexTCA( vtr, dps->composite() );
+    map<const Vertex*,vector<int>> assocModeMap;
+    vector<int>& assocA = assocModeMap[vtp];
+    vector<int>& assocD = assocModeMap[vtn];
+    assocA.reserve( 2 );
+    assocA.push_back( PDEnumString::vtrFromAngle );
+    assocD.push_back( PDEnumString::vtrFromDist );
+    int svtIndex = addSecondaryVertex( PDVertexWrapper<Vertex>( vtr ),
+                                       assocModeMap,
+                                       dps->mass(), ttm, tmm,// rcm, rom,
+//                                       dps->p4().mass(), ttm, tmm,// rcm, rom,
+                                       dir, d2d, d3d, dpsName, -1 );
+//    cout << "refitPV for " << dpsName << endl;
+    refitPV( assocModeMap, dps, svtIndex );
+//    refitPV( vtp, dps, svtIndex );
+//    refitPV( vtn, dps, svtIndex );
+    const BPHRecoCandidate* k0s = dps->getComp( "K0s" ).get();
+//    vtrDaug->push_back( rsvMap[jpsi] );
+//    vtrMoth->push_back( svtIndex );
+//    vtrMass->push_back( jpsi->p4().M() );
+////    subMass->push_back( jpsi->vertex().p4().M() );
+//    ++nVtxRel;
+    addVertexRel( svtIndex, rsvMap[k0s], PDEnumString::vtrCascade,
+                  k0s->vertex().p4().M() );
+  }
+  
+  
+  
+  if ( verbose ) cout << "fit Dx" << endl;
+  vector<BPHRecoConstCandPtr> lDx;
+  if ( vRecoFlag[PDEnumString::svtDxD0Pi] ) {
+    BPHDxToD0PiBuilder dx( *currentEvSWrap, lD0,
+                        BPHRecoBuilder::createCollection( candList, "cfp" ), 
+                        beamSpot.product() );
+    lDx = dx.build();
+//       lDx = BPHDpToJPsiKBuilder::build( *currentEvSWrap, lJPsi,
+//             BPHRecoBuilder::createCollection( candList ) );
+  }
+  int iDx;
+  int nDx = lDx.size();
+  const string dxName = "svtDxD0Pi";
+  for ( iDx = 0; iDx < nDx; ++iDx ) {
+    const BPHRecoCandidate* dx = lDx[iDx].get();
+    if ( !dx->validVertex() ) continue;
+    const vector<const Candidate*>& dxd = dx->daughFull();
+    int id;
+    int nd = dxd.size();
+    map<const Track*,TransientTrack*> ttm;
+    map<const Track*,float          > tmm;
+//    map<const Track*,const Candidate*> rcm;
+//    map<const Track*,const Candidate*> rom;
+    const Vertex* vtp = 0;
+    const Vertex* vtn = 0;
+    for ( id = 0; id < nd; ++id ) {
+      const Candidate* rc = dxd[id];
+//      const Candidate* rc = dx->originalReco( dxd[id] );
+      const Track* tkp = dx->getTrack( rc );
+      ttm[tkp] = dx->getTransientTrack( rc );
+      tmm[tkp] = dxd[id]->mass();
+//      rcm[tkp] = rc;
+//      rom[tkp] = dx->originalReco( rc );
+      if ( vtp == 0 ) {
+        p_iter = pcvMap.find( dx->originalReco( rc ) );
+        if ( p_iter != p_iend ) vtp = p_iter->second;
+      }
+      if ( vtn == 0 ) vtn = nearestPV( tkp );
+    }
+    if ( vtp == 0 ) vtp = vtn;
+    const Vertex& vtr = dx->vertex();
+    GlobalVector  dir;
+    Measurement1D d2d;
+    Measurement1D d3d;
+//    if ( vtp != 0 ) vertexDir( *vtp, vtr, dx->composite(), dir, d2d, d3d );
+    vtp =
+    vertexDir( vtr, dx->composite(), dir, d2d, d3d );
+    vtn =
+    vertexTCA( vtr, dx->composite() );
+    map<const Vertex*,vector<int>> assocModeMap;
+    vector<int>& assocA = assocModeMap[vtp];
+    vector<int>& assocD = assocModeMap[vtn];
+    assocA.reserve( 2 );
+    assocA.push_back( PDEnumString::vtrFromAngle );
+    assocD.push_back( PDEnumString::vtrFromDist );
+    int svtIndex = addSecondaryVertex( PDVertexWrapper<Vertex>( vtr ),
+                                       assocModeMap,
+                                       dx->mass(), ttm, tmm,// rcm, rom,
+//                                       dx->p4().mass(), ttm, tmm,// rcm, rom,
+                                       dir, d2d, d3d, dxName, -1 );
+//    cout << "refitPV for " << dxName << endl;
+    refitPV( assocModeMap, dx, svtIndex );
+//    refitPV( vtp, dx, svtIndex );
+//    refitPV( vtn, dx, svtIndex );
+    const BPHRecoCandidate* d0 = dx->getComp( "D0" ).get();
+//    vtrDaug->push_back( rsvMap[jpsi] );
+//    vtrMoth->push_back( svtIndex );
+//    vtrMass->push_back( jpsi->p4().M() );
+////    subMass->push_back( jpsi->vertex().p4().M() );
+//    ++nVtxRel;
+    addVertexRel( svtIndex, rsvMap[d0], PDEnumString::vtrCascade,
+                  d0->vertex().p4().M() );
   }
 
   if ( verbose ) cout << "fit Lambda0" << endl;
@@ -5584,6 +5748,7 @@ int PDEDMToNtuple::addSecondaryVertex( double px , double py , double pz ,
   svtSigma3D   ->push_back( d3d.error() );
   svtJet       ->push_back( jetId );
   svtBadQuality->push_back( badQuality );
+  svtPCA->push_back(0);
 //  fillSecondaryVertex( vtx.position().x(),
 //                       vtx.position().y(),
 //                       vtx.position().z(),

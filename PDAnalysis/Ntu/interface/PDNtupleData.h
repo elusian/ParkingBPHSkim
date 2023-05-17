@@ -442,6 +442,8 @@ class PDNtupleData: public NtuData<float> {
   std::vector<number>* svtSigma3D;
   std::vector<int   >* svtJet;
   std::vector<int   >* svtBadQuality; // 0=good, 1=fake, 2=invalid
+  
+  std::vector<number>* svtPCA;
 
   // composite particle vertices
   bool use_vrel;

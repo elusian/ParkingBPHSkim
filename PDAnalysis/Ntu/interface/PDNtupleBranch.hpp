@@ -919,6 +919,9 @@ void PDNtupleBranch<T>::setBranches_sVertices() {
                    size, 99                   , &b_svtJet          );
   this->setBranch( "svtBadQuality"            , &  svtBadQuality  ,
                    size, 99                   , &b_svtBadQuality   );
+                   
+  this->setBranch( "svtPCA"            , &  svtPCA  ,
+                   size, 99                   , &b_svtPCA   );
   return;
 }
 

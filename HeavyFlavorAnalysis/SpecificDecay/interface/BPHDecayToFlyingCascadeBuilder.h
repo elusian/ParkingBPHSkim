@@ -82,6 +82,7 @@ class BPHDecayToFlyingCascadeBuilder:
       fCollectSel.clear();
       fCollectSel.reserve( fc.size() );
       for ( const flying_ptr& f: fc ) {
+        if ( f->isEmpty() || !f->isValidFit()) continue;
         if ( flySel->accept( *f ) ) fCollectSel.push_back( f );
       }
       brb.add( fName, fCollectSel );

@@ -111,7 +111,7 @@ void BPHDecayToChargedXXbarBuilder::fillRecList() {
     for ( iNeg = 0; iNeg < nNeg; ++ iNeg ) {
       Particle* nc = nList[iNeg];
       const reco::Track* nt = nc->track;
-      if ( fabs( nt->dz() - pt->dz() ) > 1.0 ) continue;
+      if ( fabs( nt->dz() - pt->dz() ) > dzMax ) continue;
       double nx = nc->px;
       double ny = nc->py;
       double nz = nc->pz;

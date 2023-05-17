@@ -52,9 +52,10 @@ class BPHPhiToKKBuilder: public BPHDecayToChargedXXbarBuilder {
                                   BPHParticleMasses::kaonMSigma,
                                   posCollection, negCollection ) {
     setPtMin (  0.7 );
-    setEtaMax( 10.0 );
+    setEtaMax( 3.0 );
     setMassRange ( 1.00, 1.04 );
-    setProbMin   ( 0.0 );
+    setProbMin   ( 0.02 );
+    setDzMax(0.5);
   }
 
   // deleted copy constructor and assignment operator

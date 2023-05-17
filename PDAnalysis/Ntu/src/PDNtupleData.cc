@@ -403,6 +403,8 @@ PDNtupleData::PDNtupleData() {
   svtSigma3D    = new std::vector<number>;
   svtJet        = new std::vector<int   >;
   svtBadQuality = new std::vector<int   >;
+  
+  svtPCA = new std::vector<number>;
 
   // composite particle vertices
   use_vrel = false;

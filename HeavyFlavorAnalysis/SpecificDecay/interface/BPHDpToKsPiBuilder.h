@@ -47,7 +47,8 @@ class BPHDpToKsPiBuilder:
    */
   BPHDpToKsPiBuilder( const BPHEventSetupWrapper& es,
       const std::vector<BPHPlusMinusConstCandPtr>& k0sCollection,
-      const BPHRecoBuilder::BPHGenericCollection*  pionCollection ):
+      const BPHRecoBuilder::BPHGenericCollection*  pionCollection,
+      const reco::BeamSpot* bs ):
    BPHDecayGenericBuilderBase( es ),
    BPHDecayToFlyingCascadeBuilderBase( "K0s",
                                        BPHParticleMasses:: k0sMass,
@@ -57,11 +58,15 @@ class BPHDpToKsPiBuilder:
                             BPHParticleMasses::pionMass,
                             BPHParticleMasses::pionMSigma, pionCollection ) {
     setFlyingMassRange( 0.00, 2.00 );
-    setTrkPtMin    ( 0.0 );
+    setTrkPtMin    ( 0.7 );
     setTrkEtaMax   ( 3.0 );
     setMassRange   ( 1.5, 2.4 );
-    setProbMin     ( 0.02 );
+    setKinFitProbMin( 0.02 );
     setMassFitRange( 1.6, 2.1 );
+    if (bs) {
+      setBSForLxy  ( bs );
+      setLxySigMin ( 3.0 );
+    }
   }
 
   // deleted copy constructor and assignment operator

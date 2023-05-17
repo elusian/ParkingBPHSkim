@@ -699,9 +699,10 @@ PDEnumString::PDEnumString() {
   vertexTypeMapSI.insert( mP( svtKx0       ) );
   vertexTypeMapSI.insert( mP( svtPhi       ) );
   vertexTypeMapSI.insert( mP( svtD0        ) );
-  vertexTypeMapSI.insert( mP( svtDpK0sPi    ) );
+  vertexTypeMapSI.insert( mP( svtDpK0sPi   ) );
   vertexTypeMapSI.insert( mP( svtDsPhiPi   ) );
-  vertexTypeMapSI.insert( mP( svtDxpD0Pi   ) );
+  vertexTypeMapSI.insert( mP( svtDpsK0sK   ) );
+  vertexTypeMapSI.insert( mP( svtDxD0Pi    ) );
   vertexTypeMapSI.insert( mP( svtMuMu      ) );
   vertexTypeMapSI.insert( mP( svtBuJPsiK   ) );
   vertexTypeMapSI.insert( mP( svtBdJPsiKx  ) );
